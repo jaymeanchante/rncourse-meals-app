@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 //import { useRoute } from "@react-navigation/native";
+import MealItem from "../components/MealItem";
 import { MEALS } from "../data/dummy-data";
 
 function MealsOverviewScreen({ route }) {
@@ -7,9 +8,22 @@ function MealsOverviewScreen({ route }) {
   // alternative method to access the params:
   //const route = useRoute();
   //const categoryId = route.params.caregoryId;
+
+  const displayedMeals = MEALS.filter((mealItem) => {
+    return mealItem.categoryIds.indexOf(categoryId) >= 0;
+  });
+
+  function renderMealItem(itemData) {
+    return <MealItem title={itemData.item.title} />;
+  }
+
   return (
     <View style={styles.container}>
-      <Text>Meals Overview Screen - {categoryId}</Text>
+      <FlatList
+        data={displayedMeals}
+        keyExtractor={(item) => item.id}
+        renderItem={renderMealItem}
+      />
     </View>
   );
 }
